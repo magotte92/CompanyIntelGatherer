@@ -5,11 +5,14 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Runtime.CompilerServices;
+[assembly: InternalsVisibleTo("CompanyIntelGatherer.Test.Unit")]
 
 namespace CompanyIntelGatherer
 {
     class Program
     {
+        
         private const string Method = "θέσεις-εργασίας?utf8=✓&q=";
         static void Main(string[] args)
         {
@@ -22,7 +25,7 @@ namespace CompanyIntelGatherer
 
                 using (WebClient client = new WebClient())
                 {
-                    string content = client.DownloadString($"https://www.kariera.gr/{Method}{jobDescription.Replace(" ", string.Empty)}&loc={companyCountry.Replace(" ", string.Empty)}");
+                    string content = client.DownloadString($"https://www.kariera.gr/{Method}{jobDescription.Replace(" ", "+")}&loc={companyCountry.Replace(" ", "+")}");
                     ScrapeLogic scrapeLogic = new ScrapeLogicBuilder()
                         .WithData(content)
                         .WithRegex(@"<a class=\""job-title\"" href=\""(.*?)\"">(.*?)</a>")
