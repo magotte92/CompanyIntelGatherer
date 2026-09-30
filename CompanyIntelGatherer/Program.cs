@@ -23,7 +23,11 @@ namespace CompanyIntelGatherer
                 Console.WriteLine("Please enter the city you would like to search:");
                 var companyCountry = Console.ReadLine() ?? string.Empty;
 
+                // WebClient is obsolete on modern .NET, but replacing it with HttpClient
+                // would change user-agent, redirect, and encoding behavior of the scraper.
+#pragma warning disable SYSLIB0014
                 using (WebClient client = new WebClient())
+#pragma warning restore SYSLIB0014
                 {
                     string content = client.DownloadString($"https://www.kariera.gr/{Method}{jobDescription.Replace(" ", "+")}&loc={companyCountry.Replace(" ", "+")}");
                     ScrapeLogic scrapeLogic = new ScrapeLogicBuilder()
